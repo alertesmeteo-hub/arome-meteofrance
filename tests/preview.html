@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Aperçu AROME v1.0.0</title>
+  <link rel="stylesheet" href="../wordpress/arome-meteofrance-france/assets/arome-meteo.css">
+  <link rel="stylesheet" href="../wordpress/arome-meteofrance-france/assets/arome-map.css">
+  <style>body{margin:0;padding:18px;background:#eef3f7;font-family:Inter,"Segoe UI",Arial,sans-serif}.preview{max-width:1480px;margin:auto}</style>
+</head>
+<body>
+<main class="preview">
+<section class="amf-card amf-national" data-amf-app data-base-url="../build/test-arome" data-default-code="66136" data-default-department="66" data-default-name="Perpignan" data-hours="48" data-timezone="Europe/Paris" data-title-prefix="Prévisions AROME" data-selector="1">
+  <header class="amf-header">
+    <div><p class="amf-kicker">MODÈLE HAUTE RÉSOLUTION • FRANCE MÉTROPOLITAINE</p><h2 data-amf-title>Prévisions AROME — Perpignan</h2><p class="amf-city-altitude" data-amf-altitude>Altitude de Perpignan : chargement…</p><p class="amf-meta" data-amf-meta>Chargement du dernier run AROME…</p></div>
+    <div class="amf-badge">AROME<br><strong>1,3 km</strong></div>
+  </header>
+  <div class="amf-toolbar">
+    <div class="amf-search"><label for="preview-city">Choisissez votre commune</label><div class="amf-search-control"><span class="amf-search-icon">⌕</span><input id="preview-city" class="amf-city-input" type="search" value="Perpignan" placeholder="Nom de commune ou code postal" role="combobox" aria-expanded="false" aria-controls="preview-results" aria-describedby="preview-status"></div><button type="button" class="amf-locate-button" data-amf-locate>📍 Détecter ma ville</button><div id="preview-results" class="amf-search-results" role="listbox" hidden></div><p id="preview-status" class="amf-search-status" role="status">Saisissez au moins deux lettres ou un code postal.</p></div>
+    <div class="amf-coverage"><strong>34 746 communes</strong><span>Métropole et Corse</span></div>
+  </div>
+  <p class="amf-stale" data-amf-stale hidden>Attention : la dernière mise à jour disponible a plus de 8 heures.</p>
+  <div class="amf-tabs" role="tablist">
+    <button type="button" class="amf-tab amf-tab-map is-active" data-amf-tab="map" aria-selected="true">🗺️ Cartes météo</button>
+    <button type="button" class="amf-tab" data-amf-tab="general" aria-selected="false">🌤️ Prévisions générales</button>
+    <button type="button" class="amf-tab amf-tab-storm" data-amf-tab="storms" aria-selected="false">⛈️ Prévisions orages</button>
+    <button type="button" class="amf-tab amf-tab-snow" data-amf-tab="snow" aria-selected="false">❄️ Risque de neige</button>
+  </div>
+  <div class="amf-panel amf-map-panel" data-amf-panel="map">
+    <section class="amf-card amfm-card" data-amfm-app data-base-url="../build/test-arome" data-variable="temperature" data-timezone="Europe/Paris" data-animation="1" data-module-version="1.0.0" style="--amfm-height:760px">
+      <header class="amf-header amfm-header"><div><p class="amf-kicker">MODÈLE HAUTE RÉSOLUTION • ÉCHÉANCES HORAIRES</p><h2>Cartes AROME France — résolution 1,3 km</h2><p class="amf-meta" data-amfm-run>Chargement du dernier run AROME…</p></div><div class="amf-badge">AROME<br><strong>1,3 km</strong></div></header>
+      <div class="amfm-toolbar"><div class="amfm-field amfm-layer-picker"><span>Paramètre</span><button type="button" class="amfm-layer-trigger" data-amfm-menu-toggle aria-expanded="false"><span data-amfm-current-layer>Température à 2 m</span><span class="amfm-layer-chevron">⌄</span></button></div><div class="amfm-time-controls"><button type="button" data-amfm-previous>◀</button><button type="button" data-amfm-play>▶</button><button type="button" data-amfm-next>▶</button></div><div class="amfm-validity"><span>Prévision valable</span><strong data-amfm-validity>—</strong><small data-amfm-lead>—</small></div></div>
+      <div class="amfm-layer-menu" data-amfm-layer-menu hidden><div class="amfm-layer-menu-head"><div><strong>Choisir une carte AROME</strong><small>Uniquement les paramètres disponibles dans la production Météo-France</small></div><button type="button" data-amfm-menu-close>×</button></div><div class="amfm-layer-grid" data-amfm-layer-grid></div></div>
+      <p class="amf-stale" data-amfm-stale hidden>Production ancienne.</p>
+      <div class="amfm-viewport" data-amfm-viewport>
+        <div class="amfm-scene" data-amfm-scene><canvas class="amfm-weather-canvas" data-amfm-weather></canvas><canvas class="amfm-vector-canvas" data-amfm-vectors></canvas></div><canvas class="amfm-label-canvas" data-amfm-labels></canvas>
+        <div class="amfm-probe" data-amfm-probe hidden><strong data-amfm-probe-value>—</strong><span data-amfm-probe-label>Valeur AROME</span></div>
+        <div class="amfm-map-titlebar"><strong data-amfm-map-title>Carte AROME</strong><span data-amfm-map-run>Run AROME —</span></div><div class="amfm-map-date" data-amfm-map-date>Échéance —</div>
+        <div class="amfm-map-buttons"><span class="amfm-zoom-level" data-amfm-zoom-level>100 %</span><button type="button" data-amfm-zoom-in>+</button><button type="button" data-amfm-zoom-out>−</button><button type="button" data-amfm-reset>⌂</button><button type="button" data-amfm-fullscreen>⛶</button></div>
+        <div class="amfm-legend" data-amfm-legend></div><a class="amfm-map-brand" href="https://www.alertes-meteo.com/">www.alertes-meteo.com • Module v1.0.0</a><div class="amfm-loading" data-amfm-loading>Chargement de la carte…</div><div class="amfm-error" data-amfm-error hidden></div>
+      </div>
+      <div class="amfm-timeline"><input data-amfm-slider type="range" min="0" max="0" value="0"><div class="amfm-timeline-labels"><span>Run</span><span>Échéance maximale</span></div></div>
+      <footer class="amf-footer"><span data-amfm-generated>Mise à jour…</span></footer>
+    </section>
+  </div>
+  <div class="amf-panel" data-amf-panel="general" hidden>
+    <div class="amf-table-wrap amf-general-wrap"><table class="amf-table"><thead><tr><th>Date</th><th>Heure</th><th>Temps</th><th>T°</th><th>Hum.</th><th>Pluie</th><th>Nuages</th><th>Vent</th><th>Rafales</th><th>Pression</th></tr></thead><tbody data-amf-body-general><tr><td colspan="10" class="amf-loading">Chargement…</td></tr></tbody></table></div>
+    <section class="amf-charts"><article class="amf-chart-card"><h3 data-amf-chart-title-temperature>Températures</h3><div class="amf-chart" data-amf-chart-temperature></div></article><article class="amf-chart-card"><h3 data-amf-chart-title-pressure>Pression</h3><div class="amf-chart" data-amf-chart-pressure></div></article><article class="amf-chart-card"><h3 data-amf-chart-title-rain>Précipitations</h3><p data-amf-rain-total></p><div class="amf-chart" data-amf-chart-rain></div></article><article class="amf-chart-card"><h3 data-amf-chart-title-wind>Vent</h3><div class="amf-chart" data-amf-chart-wind></div></article></section>
+  </div>
+  <div class="amf-panel" data-amf-panel="storms" hidden><p class="amf-storm-summary" data-amf-storm-summary>Chargement…</p><div class="amf-top-scroll" data-amf-top-scroll="storms" hidden><div></div></div><div class="amf-table-wrap amf-storm-wrap" data-amf-scroll-wrap="storms"><table class="amf-table amf-storm-table"><thead><tr><th>Date</th><th>Heure</th><th>Risque</th><th>MUCAPE</th><th>LCL</th><th>Foudre</th><th>Grêle</th><th>Pluie conv.</th><th>Graupel</th><th>Pluie 1h</th><th>Rafales</th><th>Type</th><th>Détails</th></tr></thead><tbody data-amf-body-storms><tr><td colspan="13">Chargement…</td></tr></tbody></table></div></div>
+  <div class="amf-panel" data-amf-panel="snow" hidden><p class="amf-snow-summary" data-amf-snow-summary>Chargement…</p><div class="amf-top-scroll" data-amf-top-scroll="snow" hidden><div></div></div><div class="amf-table-wrap amf-snow-wrap" data-amf-scroll-wrap="snow"><table class="amf-table amf-snow-table"><thead><tr><th>Date</th><th>Heure</th><th>Risque</th><th>Phase</th><th>Neige 1h</th><th>Neige 3h</th><th>Neige 6h</th><th>Tenue</th><th>Pression</th><th>Hum.</th><th>Vent</th><th>Cumul</th><th>Détails</th></tr></thead><tbody data-amf-body-snow><tr><td colspan="13">Chargement…</td></tr></tbody></table></div></div>
+  <footer class="amf-footer"><span data-amf-generated>Mise à jour…</span><span><a href="https://www.alertes-meteo.com/">www.alertes-meteo.com</a></span><span class="amf-plugin-version">Module AROME v1.0.0</span></footer>
+</section>
+</main>
+<script src="../wordpress/arome-meteofrance-france/assets/arome-meteo.js"></script>
+<script src="../wordpress/arome-meteofrance-france/assets/arome-map.js"></script>
+</body>
+</html>
