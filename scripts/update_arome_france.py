@@ -39,7 +39,7 @@ from arome_maps import DEFAULT_BOUNDS, AromeMapRenderer
 
 
 LOGGER = logging.getLogger("arome.france")
-PIPELINE_VERSION = "1.0.2"
+PIPELINE_VERSION = "1.0.3"
 DATASET_API = (
     "https://www.data.gouv.fr/api/1/datasets/"
     "paquets-arome-resolution-0-01deg/"
@@ -126,6 +126,7 @@ INTEGER_COLUMNS = {
 MAP_FIELDS = {
     "temperature_c",
     "wind_chill_c",
+    "wet_bulb_c",
     "dewpoint_c",
     "humidex",
     "humidity_pct",
@@ -135,6 +136,7 @@ MAP_FIELDS = {
     "snow_water_equivalent_mm",
     "snow_depth_cm",
     "graupel_mm",
+    "snow_graupel_total_mm",
     "wind_speed_kmh",
     "wind_gust_kmh",
     "pressure_hpa",
@@ -145,6 +147,8 @@ MAP_FIELDS = {
     "cloud_high_pct",
     "cape_jkg",
     "reflectivity_dbz",
+    "hail_risk_code",
+    "storm_type_code",
     "altitude_m",
 }
 
@@ -868,6 +872,18 @@ def transform_step(
     )
     humidex = temperature + 0.5555 * (vapour_pressure - 10.0)
 
+    # Approximation de Stull (2011) pour la température du thermomètre mouillé,
+    # valable pour une humidité relative de 5 à 99 % (erreur type < 1 °C).
+    relative_pct = relative * 100.0
+    wet_bulb = (
+        temperature * np.arctan(0.151977 * np.sqrt(relative_pct + 8.313659))
+        + np.arctan(temperature + relative_pct)
+        - np.arctan(relative_pct - 1.676331)
+        + 0.00391838 * np.power(relative_pct, 1.5) * np.arctan(0.023101 * relative_pct)
+        - 4.686035
+    )
+    wet_bulb[~np.isfinite(temperature) | ~np.isfinite(humidity)] = np.nan
+
     wind_chill = temperature.copy()
     chill_valid = (
         np.isfinite(temperature)
@@ -943,6 +959,11 @@ def transform_step(
     storm_type[(thunder >= 3) & (reflectivity >= 50)] = 3
     storm_type[(thunder >= 4) & (cape >= 2000)] = 4
 
+    snow_graupel_total = np.nan_to_num(snow_total, nan=0.0) + np.nan_to_num(
+        graupel_total, nan=0.0
+    )
+    snow_graupel_total[~np.isfinite(snow_total) & ~np.isfinite(graupel_total)] = np.nan
+
     snow_ratio = np.select(
         [temperature <= -10, temperature <= -5, temperature <= 0, temperature <= 1.5],
         [15.0, 12.0, 10.0, 6.0],
@@ -975,6 +996,7 @@ def transform_step(
     result = {
         "temperature_c": rounded(temperature, 1),
         "wind_chill_c": rounded(wind_chill, 1),
+        "wet_bulb_c": rounded(wet_bulb, 1),
         "dewpoint_c": rounded(dewpoint, 1),
         "humidex": rounded(humidex, 1),
         "humidity_pct": rounded(humidity, 0),
@@ -1010,6 +1032,8 @@ def transform_step(
         "snow_stick_risk_code": snow_stick,
         "snow_phase_code": snow_phase,
         "snowfall_total_mm": rounded(snow_total, 1),
+        "graupel_total_mm": rounded(graupel_total, 1),
+        "snow_graupel_total_mm": rounded(snow_graupel_total, 1),
         "altitude_m": rounded(altitude, 0),
     }
     state = {

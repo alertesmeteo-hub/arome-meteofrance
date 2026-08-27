@@ -24,7 +24,7 @@ from scipy.spatial import cKDTree
 
 
 MAP_SCHEMA_VERSION = 6
-MODULE_VERSION = "1.0.0"
+MODULE_VERSION = "1.1.0"
 # Une valeur numérique tous les deux pixels cartographiques : le survol reste
 # précis à l'échelle d'une commune sans multiplier déraisonnablement le poids
 # de la branche de données.
@@ -35,6 +35,7 @@ CONTOUR_STEPS = {
     "temperature_c": 1.0,
     "surface_temperature_c": 1.0,
     "wind_chill_c": 1.0,
+    "wet_bulb_c": 1.0,
     "dewpoint_c": 1.0,
     "humidex": 1.0,
     "wind_speed_kmh": 5.0,
@@ -256,6 +257,26 @@ LAYER_SPECS = (
         decimals=1,
     ),
     LayerSpec(
+        "thermometre_mouille",
+        "Température du thermomètre mouillé",
+        "°C",
+        "wet_bulb_c",
+        (
+            (-25, "#57336f"),
+            (-15, "#3855a3"),
+            (-5, "#398bca"),
+            (0, "#56b7d8"),
+            (5, "#58c8a2"),
+            (10, "#79cf68"),
+            (15, "#d5d64a"),
+            (20, "#f0a83b"),
+            (25, "#df5d3c"),
+            (30, "#9f2955"),
+        ),
+        group="Températures",
+        decimals=1,
+    ),
+    LayerSpec(
         "temperature_850",
         "Température à 850 hPa",
         "°C",
@@ -353,6 +374,52 @@ LAYER_SPECS = (
         group="Précipitations",
         decimals=1,
         transparent_below=0.03,
+        discrete=True,
+    ),
+    LayerSpec(
+        "neige_graupel",
+        "Accumulation de neige et graupel",
+        "mm",
+        "snow_graupel_total_mm",
+        tuple(stop for stop in PRECIPITATION_STOPS if stop[0] <= 200),
+        group="Précipitations",
+        decimals=1,
+        transparent_below=0.03,
+        discrete=True,
+    ),
+    LayerSpec(
+        "grele",
+        "Risque de grêle",
+        "",
+        "hail_risk_code",
+        (
+            (0, "#f5f5f7"),
+            (1, "#ffe066"),
+            (2, "#ff8c42"),
+            (3, "#d7263d"),
+            (4, "#d7263d"),
+        ),
+        group="Précipitations",
+        decimals=0,
+        transparent_below=0.5,
+        discrete=True,
+    ),
+    LayerSpec(
+        "type_precipitation_severe",
+        "Type de précipitation sévère",
+        "",
+        "storm_type_code",
+        (
+            (0, "#f5f5f7"),
+            (1, "#ffd166"),
+            (2, "#ff9f45"),
+            (3, "#ef476f"),
+            (4, "#8338ec"),
+            (5, "#8338ec"),
+        ),
+        group="Précipitations",
+        decimals=0,
+        transparent_below=0.5,
         discrete=True,
     ),
     LayerSpec(

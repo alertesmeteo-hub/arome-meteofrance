@@ -3,7 +3,7 @@
  * Plugin Name: AROME Météo-France France — Tableaux et cartes
  * Plugin URI: https://github.com/alertesmeteo-hub/arome-meteofrance
  * Description: Module unique de cartes interactives et de prévisions AROME de Météo-France pour la France métropolitaine et la Corse.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Alertes Météo Hub
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -14,8 +14,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('AMF_VERSION', '1.1.0');
-define('AMF_RELEASE_DATE', '23/08/2026');
+define('AMF_VERSION', '1.2.0');
+define('AMF_RELEASE_DATE', '27/08/2026');
 define('AMF_OPTION_BASE_URL', 'amf_national_data_base_url');
 define(
     'AMF_DEFAULT_BASE_URL',
@@ -173,6 +173,7 @@ function amf_map_variable($value) {
     $allowed = array(
         'temperature',
         'temperature_ressentie',
+        'thermometre_mouille',
         'point_rosee',
         'humidex',
         'pluie_1h',
@@ -181,6 +182,9 @@ function amf_map_variable($value) {
         'neige_au_sol',
         'equivalent_eau_neige',
         'graupel',
+        'neige_graupel',
+        'grele',
+        'type_precipitation_severe',
         'vent',
         'rafales',
         'pression',

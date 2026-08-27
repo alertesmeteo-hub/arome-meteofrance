@@ -87,7 +87,13 @@ data/
 
 Les données proviennent directement des [paquets AROME 0,01° de Météo-France](https://www.data.gouv.fr/datasets/paquets-arome-resolution-0-01deg), publiés sous Licence Ouverte 2.0. Les communes proviennent de l'API officielle de découpage administratif française.
 
-Site : [www.alertes-meteo.com](https://www.alertes-meteo.com/) — module v1.1.0.
+Site : [www.alertes-meteo.com](https://www.alertes-meteo.com/) — module v1.2.0.
+
+## Cartes disponibles
+
+26 cartes réparties par catégorie (Températures, Précipitations, Vent, Nuages et humidité, Pression, Instabilité, Relief). Le menu de sélection distingue les paramètres essentiels (toujours visibles) des paramètres secondaires, repliés derrière un bouton « Voir plus de paramètres ».
+
+Cartes en attente du paquet AROME **HP1** (niveaux de pression), non téléchargé aujourd'hui — seuls les paquets de surface SP1/SP2/SP3 sont utilisés : températures et vent à 850/500/300 hPa, géopotentiel, humidité en altitude, ainsi que les indices d'instabilité composites (SBCAPE, MLCAPE, CIN, K-Index, Total Totals, Theta-E Lapse Rate, Bulk Shear, hélicité SRH, paramètres supercellule/tornade/grêle significative), vitesse verticale, vorticité et divergence. Leur configuration d'affichage (libellés, couleurs, groupes) existe déjà dans `scripts/arome_maps.py` — il ne manque que les données sources.
 
 ## Outils de la carte
 

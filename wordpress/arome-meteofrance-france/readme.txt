@@ -3,7 +3,7 @@ Contributors: alertesmeteo
 Tags: meteo, arome, meteofrance, carte, previsions, avada
 Requires at least: 5.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,11 @@ Les données sont lues depuis la branche data du dépôt GitHub configuré dans 
 4. Insérez [arome_meteo] dans un bloc Avada.
 
 == Changelog ==
+
+= 1.2.0 =
+* 4 nouvelles cartes : Température du thermomètre mouillé (Températures), Accumulation de neige et graupel, Risque de grêle, Type de précipitation sévère (Précipitations). Ces deux derniers réutilisent les diagnostics déjà affichés dans le tableau orages (aucune donnée inventée).
+* Le menu de sélection de carte distingue maintenant les paramètres essentiels (toujours visibles) des paramètres secondaires, repliés derrière un bouton « Voir plus de paramètres ».
+* Cartes toujours en attente du paquet AROME HP1 (niveaux de pression) : températures/vent à 850-500-300 hPa, géopotentiel, indices d'instabilité composites (K-Index, SRH, paramètres supercellule/tornade), vitesse verticale, vorticité, divergence.
 
 = 1.1.0 =
 * Ajout de la barre d'outils de la carte : « Zoom interactif » (capture PNG de la vue affichée, épinglage de la valeur au clic) et « Diagramme » (clic sur la carte pour afficher un mini-diagramme température/pluie de la commune la plus proche).

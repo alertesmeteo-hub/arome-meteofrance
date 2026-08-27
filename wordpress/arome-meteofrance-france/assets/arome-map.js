@@ -54,6 +54,26 @@
         return Math.max(minimum, Math.min(maximum, value));
     }
 
+    var ESSENTIAL_LAYER_KEYS = {
+        temperature: true,
+        temperature_ressentie: true,
+        point_rosee: true,
+        humidex: true,
+        pluie_1h: true,
+        pluie_cumul: true,
+        neige: true,
+        neige_au_sol: true,
+        vent: true,
+        rafales: true,
+        nebulosite: true,
+        humidite: true,
+        pression: true,
+        pression_surface: true,
+        mucape: true,
+        reflectivite: true,
+        altitude: true
+    };
+
     function runLabelUtc(value) {
         var date = new Date(value);
         function two(number) {
@@ -144,6 +164,7 @@
         var maxScale = 64;
         var pendingFocus = null;
         var toolMode = null;
+        var showSecondaryLayers = false;
         var pinnedEnabled = false;
         var pinnedPoint = null;
         var tapStart = null;
@@ -966,6 +987,7 @@
                 'Autres'
             ];
             var grouped = {};
+            var hasSecondary = false;
             layerGrid.replaceChildren();
             Object.keys(manifest.layers || {}).forEach(function (key) {
                 var layer = manifest.layers[key];
@@ -974,6 +996,9 @@
                     grouped[group] = [];
                 }
                 grouped[group].push({ key: key, layer: layer });
+                if (!ESSENTIAL_LAYER_KEYS[key]) {
+                    hasSecondary = true;
+                }
             });
             if (!manifest.layers[currentLayer]) {
                 currentLayer = Object.keys(manifest.layers || {})[0] || '';
@@ -988,9 +1013,14 @@
                 title.textContent = group;
                 section.appendChild(title);
                 grouped[group].forEach(function (entry) {
+                    var essential = Boolean(ESSENTIAL_LAYER_KEYS[entry.key]);
                     var button = document.createElement('button');
                     button.type = 'button';
-                    button.className = 'amfm-layer-option';
+                    button.className = 'amfm-layer-option' +
+                        (essential ? '' : ' amfm-layer-option-secondary');
+                    if (!essential) {
+                        button.hidden = !showSecondaryLayers;
+                    }
                     button.dataset.amfmLayerKey = entry.key;
                     button.setAttribute('aria-pressed', 'false');
                     var label = document.createElement('span');
@@ -1009,6 +1039,20 @@
                 });
                 layerGrid.appendChild(section);
             });
+            if (hasSecondary) {
+                var moreButton = document.createElement('button');
+                moreButton.type = 'button';
+                moreButton.className = 'amfm-layer-more';
+                moreButton.dataset.amfmLayerMore = '1';
+                moreButton.textContent = showSecondaryLayers
+                    ? 'Voir moins de paramètres ▴'
+                    : 'Voir plus de paramètres ▾';
+                moreButton.addEventListener('click', function () {
+                    showSecondaryLayers = !showSecondaryLayers;
+                    buildLayerMenu();
+                });
+                layerGrid.appendChild(moreButton);
+            }
             refreshLayerMenu();
         }
 
