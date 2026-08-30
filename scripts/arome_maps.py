@@ -24,7 +24,7 @@ from scipy.spatial import cKDTree
 
 
 MAP_SCHEMA_VERSION = 6
-MODULE_VERSION = "1.1.0"
+MODULE_VERSION = "1.1.1"
 # Une valeur numérique tous les deux pixels cartographiques : le survol reste
 # précis à l'échelle d'une commune sans multiplier déraisonnablement le poids
 # de la branche de données.
@@ -126,6 +126,8 @@ class LayerSpec:
     transparent_below: float | None = None
     opacity: int = 244
     discrete: bool = False
+    source_key: str | None = None
+    range_mode: str | None = None
 
 
 PRECIPITATION_STOPS = (
@@ -316,7 +318,7 @@ LAYER_SPECS = (
     ),
     LayerSpec(
         "pluie_cumul",
-        "Précipitations totales",
+        "Précipitations cumulées sur une période",
         "mm",
         "precipitation_total_mm",
         PRECIPITATION_STOPS,
@@ -325,6 +327,7 @@ LAYER_SPECS = (
         transparent_below=0.03,
         opacity=255,
         discrete=True,
+        range_mode="difference",
     ),
     LayerSpec(
         "neige",
@@ -456,6 +459,25 @@ LAYER_SPECS = (
             (160, "#25152e"),
         ),
         group="Vent",
+    ),
+    LayerSpec(
+        "rafales_max",
+        "Rafales maximales sur une période",
+        "km/h",
+        "wind_gust_kmh",
+        (
+            (0, "#edf7e8"),
+            (20, "#a9d77d"),
+            (40, "#f0cf46"),
+            (60, "#ef8b2c"),
+            (80, "#db3d3d"),
+            (100, "#9e235d"),
+            (130, "#4d1647"),
+            (160, "#25152e"),
+        ),
+        group="Vent",
+        source_key="rafales",
+        range_mode="maximum",
     ),
     LayerSpec(
         "vent_850",
@@ -1179,6 +1201,8 @@ class AromeMapRenderer:
         files: dict[str, str] = {}
         probes: dict[str, str] = {}
         for spec in LAYER_SPECS:
+            if spec.source_key is not None:
+                continue
             values = fields.get(spec.field)
             if values is None or not np.any(np.isfinite(values)):
                 continue
@@ -1210,6 +1234,13 @@ class AromeMapRenderer:
                 )
             self.available_layers.add(spec.key)
 
+        for spec in LAYER_SPECS:
+            if spec.source_key is None or spec.source_key not in files:
+                continue
+            files[spec.key] = files[spec.source_key]
+            probes[spec.key] = probes[spec.source_key]
+            self.available_layers.add(spec.key)
+
         self.steps.append(
             {
                 "lead_hour": int(lead_hour),
@@ -1234,6 +1265,9 @@ class AromeMapRenderer:
                 "decimals": spec.decimals,
                 "transparent_below": spec.transparent_below,
                 "discrete": spec.discrete,
+                "opacity": spec.opacity,
+                "source_key": spec.source_key,
+                "range_mode": spec.range_mode,
                 "stops": [
                     {"value": value, "color": colour}
                     for value, colour in spec.stops
