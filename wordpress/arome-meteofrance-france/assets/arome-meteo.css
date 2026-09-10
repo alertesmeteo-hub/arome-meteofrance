@@ -1,0 +1,1901 @@
+.amf-card {
+    --amf-navy: #073b63;
+    --amf-blue: #086ca8;
+    --amf-cyan: #1fb8d0;
+    --amf-line: #d9e5ed;
+    --amf-soft: #f3f8fb;
+    width: 100%;
+    max-width: 1180px;
+    box-sizing: border-box;
+    margin: 1.25rem auto;
+    overflow: hidden;
+    border: 1px solid #cbdce7;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(7, 59, 99, .14);
+    color: #183242;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.amf-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 26px;
+    background: linear-gradient(120deg, var(--amf-navy), #075887 62%, #0b83ac);
+    color: #fff;
+}
+
+.amf-header h2 {
+    margin: 2px 0 5px;
+    color: #fff;
+    font-size: clamp(1.25rem, 2vw, 1.85rem);
+    line-height: 1.15;
+}
+
+.amf-kicker,
+.amf-meta {
+    margin: 0;
+}
+
+.amf-kicker {
+    color: #aeefff;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+}
+
+.amf-meta {
+    color: #dceff7;
+    font-size: .82rem;
+}
+
+.amf-meta span {
+    padding: 0 6px;
+}
+
+.amf-badge {
+    min-width: 112px;
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .12);
+    text-align: center;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    line-height: 1.05;
+}
+
+.amf-badge strong {
+    font-size: 1.18rem;
+}
+
+.amf-card [hidden] {
+    display: none !important;
+}
+
+.amf-toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #cfe0e9;
+    background: linear-gradient(180deg, #f7fbfd, #edf6fa);
+}
+
+.amf-search {
+    position: relative;
+    z-index: 5;
+    width: min(100%, 590px);
+}
+
+.amf-search > label {
+    display: block;
+    margin: 0 0 6px;
+    color: var(--amf-navy);
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.amf-search-control {
+    position: relative;
+}
+
+.amf-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    z-index: 1;
+    color: #337894;
+    font-size: 1.35rem;
+    line-height: 1;
+    transform: translateY(-52%);
+    pointer-events: none;
+}
+
+.amf-card .amf-city-input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 46px;
+    margin: 0;
+    padding: 9px 42px;
+    border: 2px solid #86b6ca;
+    border-radius: 10px;
+    outline: 0;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(7, 59, 99, .08);
+    color: #173c51;
+    font: 700 .96rem/1.2 Inter, "Segoe UI", Arial, sans-serif;
+    appearance: none;
+}
+
+.amf-card .amf-city-input:focus {
+    border-color: var(--amf-blue);
+    box-shadow: 0 0 0 3px rgba(8, 108, 168, .17);
+}
+
+.amf-card .amf-city-input::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.amf-search-results {
+    position: absolute;
+    top: 72px;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    max-height: 330px;
+    overflow-y: auto;
+    border: 1px solid #9fc4d5;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 14px 32px rgba(7, 59, 99, .24);
+}
+
+.amf-card .amf-search-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 52px;
+    margin: 0;
+    padding: 9px 13px;
+    border: 0;
+    border-bottom: 1px solid #dce9ef;
+    border-radius: 0;
+    background: #fff;
+    color: #183b4e;
+    text-align: left;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+}
+
+.amf-card .amf-search-result:last-child {
+    border-bottom: 0;
+}
+
+.amf-card .amf-search-result:hover,
+.amf-card .amf-search-result:focus,
+.amf-card .amf-search-result.is-active {
+    outline: 0;
+    background: #e6f5fb;
+    color: #073b63;
+}
+
+.amf-result-name {
+    font-size: .9rem;
+    font-weight: 800;
+}
+
+.amf-result-details {
+    color: #587583;
+    font-size: .74rem;
+    white-space: nowrap;
+}
+
+.amf-search-status {
+    min-height: 18px;
+    margin: 5px 2px 0;
+    color: #55717f;
+    font-size: .72rem;
+}
+
+.amf-search-status.amf-search-error {
+    color: #9a2727;
+    font-weight: 700;
+}
+
+.amf-coverage {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 22px;
+    color: #496978;
+    font-size: .72rem;
+}
+
+.amf-coverage strong {
+    color: var(--amf-navy);
+    font-size: .95rem;
+}
+
+.amf-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-color: #9bb9ca #edf4f7;
+}
+
+.amf-stale {
+    margin: 0;
+    padding: 10px 18px;
+    border-bottom: 1px solid #e7c56c;
+    background: #fff6d8;
+    color: #704f00;
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.amf-table {
+    width: 100%;
+    min-width: 820px;
+    margin: 0;
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: .84rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.amf-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 10px 7px;
+    border: 0;
+    border-bottom: 2px solid #b8d2e1;
+    background: #e8f3f8;
+    color: #17435c;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    white-space: nowrap;
+}
+
+.amf-table tbody th,
+.amf-table tbody td {
+    padding: 8px 7px;
+    border: 0;
+    border-bottom: 1px solid var(--amf-line);
+    background: #fff;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.amf-table .amf-loading {
+    height: 110px;
+    background: #fff !important;
+    color: #426677;
+    text-align: center;
+    font-weight: 700;
+}
+
+.amf-table .amf-load-error {
+    color: #942424;
+}
+
+.amf-table tbody tr:nth-child(even) th,
+.amf-table tbody tr:nth-child(even) td {
+    background: var(--amf-soft);
+}
+
+.amf-table tbody tr:hover th,
+.amf-table tbody tr:hover td {
+    background: #eaf7fb;
+}
+
+.amf-table tbody tr.amf-new-day th,
+.amf-table tbody tr.amf-new-day td {
+    border-top: 3px solid var(--amf-cyan);
+}
+
+.amf-table tbody th {
+    color: var(--amf-navy);
+    font-weight: 800;
+}
+
+.amf-hour {
+    color: #075887;
+    font-weight: 800;
+}
+
+.amf-condition {
+    min-width: 112px;
+    text-align: left !important;
+}
+
+.amf-icon {
+    display: inline-block;
+    width: 28px;
+    margin-right: 4px;
+    text-align: center;
+    font-size: 1.15rem;
+}
+
+.amf-temperature {
+    font-weight: 900;
+}
+
+.amf-temp-cold { color: #225db4; background: #e5f0ff !important; }
+.amf-temp-cool { color: #087da1; }
+.amf-temp-mild { color: #278238; }
+.amf-temp-warm { color: #c27500; background: #fff6d8 !important; }
+.amf-temp-hot { color: #d64a16; background: #ffe8dc !important; }
+.amf-temp-extreme { color: #fff; background: #bb142c !important; }
+
+.amf-rain {
+    color: #075da3;
+    background: #dff2ff !important;
+    font-weight: 800;
+}
+
+.amf-direction {
+    display: inline-block;
+    min-width: 31px;
+    margin-left: 3px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    background: #dfeaf0;
+    color: #274c60;
+    font-size: .7rem;
+    font-weight: 800;
+}
+
+.amf-gust-moderate { color: #986400; background: #fff4c9 !important; }
+.amf-gust-strong { color: #b5440a; background: #ffe5d4 !important; }
+.amf-gust-danger { color: #fff; background: #b7192f !important; }
+
+.amf-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding: 12px 18px;
+    background: #edf5f8;
+    color: #4d6878;
+    font-size: .72rem;
+}
+
+.amf-footer a {
+    color: #075f94;
+    font-weight: 700;
+}
+
+.amf-message {
+    margin: 1rem 0;
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.amf-error {
+    border: 1px solid #e5b5b5;
+    background: #fff0f0;
+    color: #8a2020;
+}
+
+@media (max-width: 680px) {
+    .amf-card {
+        border-radius: 10px;
+    }
+
+    .amf-header {
+        align-items: flex-start;
+        padding: 17px;
+    }
+
+    .amf-toolbar {
+        display: block;
+        padding: 15px;
+    }
+
+    .amf-search {
+        width: 100%;
+    }
+
+    .amf-card .amf-search-result {
+        display: block;
+    }
+
+    .amf-result-name,
+    .amf-result-details {
+        display: block;
+    }
+
+    .amf-result-details {
+        margin-top: 3px;
+        white-space: normal;
+    }
+
+    .amf-coverage {
+        display: none;
+    }
+
+    .amf-badge {
+        min-width: 86px;
+    }
+
+    .amf-footer {
+        display: block;
+    }
+
+    .amf-footer span {
+        display: block;
+        margin: 4px 0;
+    }
+}
+
+@media print {
+    .amf-card {
+        box-shadow: none;
+    }
+
+    .amf-table-wrap {
+        overflow: visible;
+    }
+
+    .amf-table {
+        min-width: 0;
+        font-size: 7pt;
+    }
+}
+
+/* === Sélecteur Général / Orages / Neige — v2.3 === */
+.amf-tabs {
+    display: flex;
+    gap: 10px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #cfe0e9;
+    background: #fff;
+}
+
+.amf-card .amf-tab {
+    appearance: none;
+    margin: 0;
+    padding: 10px 16px;
+    border: 1px solid #a9c5d4;
+    border-radius: 999px;
+    background: #f4f8fb;
+    color: #214b61;
+    font: 800 .84rem/1.2 Inter, "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.amf-card .amf-tab:hover,
+.amf-card .amf-tab:focus-visible {
+    outline: 0;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(7, 59, 99, .12);
+}
+
+.amf-card .amf-tab.is-active {
+    border-color: #0b6f9f;
+    background: #0b6f9f;
+    color: #fff;
+    box-shadow: 0 6px 15px rgba(11, 111, 159, .22);
+}
+
+.amf-card .amf-tab-storm.is-active {
+    border-color: #7b3fa1;
+    background: linear-gradient(135deg, #563072, #8d4ca8);
+    box-shadow: 0 6px 15px rgba(102, 55, 132, .24);
+}
+
+.amf-card .amf-tab-snow.is-active {
+    border-color: #2787ad;
+    background: linear-gradient(135deg, #176a91, #50a9c9);
+    box-shadow: 0 6px 15px rgba(23, 106, 145, .24);
+}
+
+.amf-panel[hidden] {
+    display: none !important;
+}
+
+.amf-storm-summary {
+    margin: 0;
+    padding: 11px 18px;
+    border-bottom: 1px solid #d8c7e5;
+    background: #f5eff9;
+    color: #55306a;
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.amf-storm-summary-warning {
+    border-bottom-color: #e6c467;
+    background: #fff6d8;
+    color: #704f00;
+}
+
+.amf-storm-wrap {
+    background: #fff;
+}
+
+.amf-storm-table {
+    min-width: 1680px;
+    font-size: .77rem;
+}
+
+.amf-storm-table thead th {
+    background: #f0e8f6;
+    color: #4f2b63;
+    border-bottom-color: #cbb6d8;
+}
+
+.amf-storm-table tbody tr:nth-child(even) th,
+.amf-storm-table tbody tr:nth-child(even) td {
+    background: #fbf8fd;
+}
+
+.amf-thunder-risk,
+.amf-hazard {
+    font-weight: 900;
+}
+
+.amf-thunder-0 { background: #f2f4f5 !important; color: #53616a; }
+.amf-thunder-1 { background: #e8f7ea !important; color: #207438; }
+.amf-thunder-2 { background: #fff5c9 !important; color: #806400; }
+.amf-thunder-3 { background: #ffe3c7 !important; color: #a44600; }
+.amf-thunder-4 { background: #b81f37 !important; color: #fff; }
+
+.amf-hazard-0 { color: #3f6c4b; }
+.amf-hazard-1 { background: #eef7e9 !important; color: #397144; }
+.amf-hazard-2 { background: #fff0c4 !important; color: #8b6100; }
+.amf-hazard-3 { background: #ffd9d9 !important; color: #9b2323; }
+
+.amf-cape-mid {
+    background: #fff2c8 !important;
+    color: #805a00;
+    font-weight: 800;
+}
+
+.amf-cape-high {
+    background: #ffd5bd !important;
+    color: #a33e00;
+    font-weight: 900;
+}
+
+.amf-lightning-high {
+    background: #eee3ff !important;
+    color: #5f2e99;
+    font-weight: 900;
+}
+
+.amf-rain-heavy {
+    background: #d9ebff !important;
+    color: #075aa5;
+    font-weight: 900;
+}
+
+.amf-storm-type {
+    min-width: 150px;
+    color: #4d2a61;
+    font-weight: 800;
+}
+
+
+.amf-details-cell {
+    min-width: 74px;
+}
+
+.amf-card .amf-details-button {
+    margin: 0;
+    padding: 5px 8px;
+    border: 1px solid #af92c2;
+    border-radius: 7px;
+    background: #f5eff9;
+    color: #5d3471;
+    font: 800 .7rem/1.1 Inter, "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+}
+
+.amf-card .amf-details-button:hover,
+.amf-card .amf-details-button:focus-visible {
+    outline: 0;
+    background: #e9dcf1;
+}
+
+.amf-advanced-row td {
+    padding: 0 !important;
+    background: #f8f4fb !important;
+}
+
+.amf-advanced-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(135px, 1fr));
+    gap: 8px;
+    padding: 10px 14px 12px;
+    text-align: left;
+}
+
+.amf-advanced-item {
+    padding: 8px 10px;
+    border: 1px solid #ddd0e6;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.amf-advanced-label,
+.amf-advanced-value {
+    display: block;
+}
+
+.amf-advanced-label {
+    margin-bottom: 3px;
+    color: #6c5875;
+    font-size: .66rem;
+    font-weight: 700;
+}
+
+.amf-advanced-value {
+    color: #47275a;
+    font-size: .82rem;
+    font-weight: 900;
+}
+
+.amf-storm-note {
+    margin: 0;
+    padding: 13px 18px 15px;
+    border-top: 1px solid #e1d7e8;
+    background: #faf8fc;
+    color: #665b6c;
+    font-size: .72rem;
+    line-height: 1.45;
+}
+
+
+/* === Risque de neige — v2.3 === */
+.amf-snow-summary {
+    margin: 0;
+    padding: 11px 18px;
+    border-bottom: 1px solid #b9d8e5;
+    background: #edf8fc;
+    color: #175a76;
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.amf-snow-summary-warning {
+    border-bottom-color: #e6c467;
+    background: #fff6d8;
+    color: #704f00;
+}
+
+.amf-snow-table {
+    min-width: 1220px;
+    font-size: .8rem;
+}
+
+.amf-snow-table thead th {
+    background: #e8f5fa;
+    color: #175a76;
+    border-bottom-color: #add2e0;
+}
+
+.amf-snow-table tbody tr:nth-child(even) th,
+.amf-snow-table tbody tr:nth-child(even) td {
+    background: #f7fbfd;
+}
+
+.amf-snow-risk,
+.amf-stick {
+    font-weight: 900;
+}
+
+.amf-snow-0 { background: #f2f4f5 !important; color: #53616a; }
+.amf-snow-1 { background: #e8f7ea !important; color: #207438; }
+.amf-snow-2 { background: #fff5c9 !important; color: #806400; }
+.amf-snow-3 { background: #dceeff !important; color: #145d91; }
+.amf-snow-4 { background: #255f9a !important; color: #fff; }
+
+.amf-stick-0 { color: #66747c; }
+.amf-stick-1 { color: #36714a; }
+.amf-stick-2 { background: #e8f3ff !important; color: #205f95; }
+.amf-stick-3 { background: #cfe5ff !important; color: #114f86; }
+
+.amf-snow-note {
+    margin: 0;
+    padding: 13px 18px 15px;
+    border-top: 1px solid #d2e6ee;
+    background: #f8fcfd;
+    color: #526b76;
+    font-size: .72rem;
+    line-height: 1.45;
+}
+
+/* === Ajustements v2.4 : dates groupées, vent/pluie colorés, diagrammes === */
+.amf-day-cell {
+    min-width: 66px;
+    padding: 7px 6px !important;
+    vertical-align: middle;
+    border-right: 1px solid #9ed7d7 !important;
+    background: #dff8f6 !important;
+    color: #075887 !important;
+    text-align: center !important;
+    white-space: normal !important;
+}
+
+.amf-day-weekday,
+.amf-day-date {
+    display: block;
+    line-height: 1.15;
+}
+
+.amf-day-weekday {
+    margin-bottom: 4px;
+    font-size: .76rem;
+    font-weight: 900;
+    text-transform: capitalize;
+}
+
+.amf-day-date {
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.amf-hour {
+    min-width: 54px;
+}
+
+.amf-wind-cell strong {
+    display: inline-block;
+    min-width: 58px;
+}
+
+.amf-direction {
+    display: inline-flex;
+    min-width: 48px;
+    margin-left: 5px;
+    padding: 3px 5px;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 6px;
+    background: #edf3f6;
+    color: #274c60;
+    font-size: .69rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.amf-wind-arrow {
+    display: inline-block;
+    width: 15px;
+    transform-origin: 50% 50%;
+    font-size: .95rem;
+    line-height: 1;
+}
+
+.amf-wind-light { color: #26725b; }
+.amf-direction.amf-wind-light { background: #e7f6ef; }
+.amf-wind-moderate { color: #32729b; }
+.amf-direction.amf-wind-moderate { background: #e5f1f8; }
+.amf-wind-fresh { color: #8b6500; }
+.amf-direction.amf-wind-fresh { background: #fff4c9; }
+.amf-wind-strong { color: #b34a0a; }
+.amf-direction.amf-wind-strong { background: #ffe4cf; }
+.amf-wind-violent { color: #a4142d; }
+.amf-direction.amf-wind-violent { background: #ffd9df; }
+
+.amf-rain-trace {
+    background: #eef9ff !important;
+    color: #35779a !important;
+}
+.amf-rain-light {
+    background: #dff3ff !important;
+    color: #126493 !important;
+}
+.amf-rain-moderate {
+    background: #bfe7ff !important;
+    color: #075b91 !important;
+}
+.amf-rain-strong {
+    background: #81c9f3 !important;
+    color: #063f70 !important;
+}
+.amf-rain-intense {
+    background: #225ea8 !important;
+    color: #fff !important;
+}
+
+.amf-top-scroll {
+    height: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom: 1px solid #d8c7e5;
+    background: #fbf8fd;
+    scrollbar-color: #9d7caf #eee6f3;
+}
+
+.amf-top-scroll[hidden] {
+    display: none !important;
+}
+
+.amf-top-scroll > div {
+    height: 1px;
+}
+
+.amf-advanced-list {
+    display: flex;
+    width: min(100%, 520px);
+    margin: 0;
+    padding: 10px 14px 12px;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.amf-advanced-list .amf-advanced-item {
+    display: flex;
+    padding: 7px 10px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border: 1px solid #ddd0e6;
+    border-radius: 7px;
+    background: #fff;
+}
+
+.amf-advanced-list .amf-advanced-label,
+.amf-advanced-list .amf-advanced-value {
+    display: block;
+    margin: 0;
+}
+
+.amf-advanced-list .amf-advanced-label {
+    color: #6c5875;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.amf-advanced-list .amf-advanced-value {
+    color: #47275a;
+    font-size: .82rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.amf-charts {
+    display: grid;
+    gap: 16px;
+    padding: 20px 18px 22px;
+    border-top: 1px solid #dbe7ee;
+    background: #f7fafc;
+}
+
+.amf-chart-card {
+    overflow: hidden;
+    border: 1px solid #d4e2ea;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 5px 16px rgba(7, 59, 99, .07);
+}
+
+.amf-chart-card h3 {
+    margin: 0;
+    padding: 13px 15px 8px;
+    color: #123f5a;
+    font-size: .94rem;
+    font-weight: 900;
+}
+
+.amf-chart-total {
+    margin: -3px 15px 2px;
+    color: #0a679a;
+    font-size: .78rem;
+    font-weight: 900;
+}
+
+.amf-chart {
+    min-height: 180px;
+    padding: 0 8px 8px;
+}
+
+.amf-chart-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 180px;
+}
+
+.amf-chart-grid {
+    stroke: #dce7ed;
+    stroke-width: 1;
+}
+
+.amf-chart-axis {
+    fill: #607987;
+    font: 700 11px/1 Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.amf-chart-xaxis {
+    font-size: 10px;
+}
+
+.amf-chart-axis-cumulative {
+    fill: #315a8d;
+}
+
+.amf-chart-line {
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.amf-series-temperature { stroke: #d45b29; }
+.amf-series-pressure { stroke: #5d4ba7; }
+.amf-series-wind { stroke: #1c7f8c; }
+.amf-series-gust { stroke: #d07a23; }
+.amf-series-rain-cumulative { stroke: #315a8d; stroke-width: 2.4; }
+.amf-chart-rain-bar { fill: #45a9dd; }
+
+.amf-chart-empty {
+    display: flex;
+    min-height: 170px;
+    align-items: center;
+    justify-content: center;
+    color: #687f8a;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+@media (max-width: 680px) {
+    .amf-tabs {
+        gap: 7px;
+        padding: 11px 12px;
+        overflow-x: auto;
+    }
+
+    .amf-card .amf-tab {
+        flex: 0 0 auto;
+        padding: 9px 12px;
+        font-size: .78rem;
+    }
+
+    .amf-storm-summary,
+    .amf-snow-summary,
+    .amf-storm-note,
+    .amf-snow-note {
+        padding-right: 13px;
+        padding-left: 13px;
+    }
+
+    .amf-advanced-list {
+        width: auto;
+        padding: 9px;
+    }
+
+    .amf-advanced-list .amf-advanced-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .amf-charts {
+        padding: 14px 10px 16px;
+    }
+
+    .amf-chart-card h3 {
+        padding-right: 12px;
+        padding-left: 12px;
+        font-size: .86rem;
+    }
+
+    .amf-chart {
+        overflow-x: auto;
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+
+    .amf-chart-svg {
+        width: 760px;
+        max-width: none;
+    }
+}
+
+
+/* === Ajustements v2.5 : jours colorés, vents par pas de 5, orages compacts === */
+.amf-day-cell {
+    border-right-width: 2px !important;
+}
+.amf-day-mon { background: #e5f1ff !important; border-right-color: #6da8e8 !important; color: #175a91 !important; }
+.amf-day-tue { background: #e8f7ea !important; border-right-color: #72b67d !important; color: #246b36 !important; }
+.amf-day-wed { background: #fff0df !important; border-right-color: #e6a45f !important; color: #8a4a08 !important; }
+.amf-day-thu { background: #efe7fb !important; border-right-color: #9f7bd1 !important; color: #5e3a8b !important; }
+.amf-day-fri { background: #e1f7f5 !important; border-right-color: #5ab7ad !important; color: #17675f !important; }
+.amf-day-sat { background: #fbe8f2 !important; border-right-color: #d986ad !important; color: #8c3c63 !important; }
+.amf-day-sun { background: #fff5ce !important; border-right-color: #d8ad3c !important; color: #7b5a00 !important; }
+
+.amf-storm-table {
+    min-width: 1410px;
+}
+
+/* Date et heure restent visibles pendant le défilement horizontal. */
+.amf-storm-table thead th:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    min-width: 70px;
+}
+.amf-storm-table thead th:nth-child(2) {
+    position: sticky;
+    left: 70px;
+    z-index: 8;
+    min-width: 58px;
+    box-shadow: 4px 0 8px rgba(50, 31, 60, .08);
+}
+.amf-storm-table tbody .amf-day-cell {
+    position: sticky;
+    left: 0;
+    z-index: 6;
+    min-width: 70px;
+}
+.amf-storm-table tbody .amf-hour {
+    position: sticky;
+    left: 70px;
+    z-index: 5;
+    min-width: 58px;
+    background: #f8f4fb !important;
+    box-shadow: 4px 0 8px rgba(50, 31, 60, .06);
+}
+.amf-storm-table tbody tr:hover .amf-hour {
+    background: #eee4f5 !important;
+}
+
+.amf-details-cell {
+    min-width: 178px;
+    padding: 6px 7px !important;
+    vertical-align: top;
+}
+.amf-card .amf-details-button {
+    width: 100%;
+    min-height: 29px;
+}
+.amf-details-inline {
+    width: 100%;
+    margin-top: 7px;
+    padding: 0;
+    gap: 5px;
+}
+.amf-details-inline[hidden] {
+    display: none !important;
+}
+.amf-details-inline .amf-advanced-item {
+    display: block;
+    padding: 6px 7px;
+    border-radius: 6px;
+    text-align: left;
+}
+.amf-details-inline .amf-advanced-label {
+    margin: 0 0 2px;
+    font-size: .64rem;
+    line-height: 1.15;
+    white-space: normal;
+}
+.amf-details-inline .amf-advanced-value {
+    font-size: .76rem;
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.amf-top-scroll {
+    height: 20px;
+    border-top: 1px solid #e2d6ea;
+}
+
+/* Teinte légère de la colonne Heure, assortie au jour. */
+.amf-hour-mon { background: #f3f8ff !important; }
+.amf-hour-tue { background: #f2faf3 !important; }
+.amf-hour-wed { background: #fff8f0 !important; }
+.amf-hour-thu { background: #f8f4fd !important; }
+.amf-hour-fri { background: #f1fbfa !important; }
+.amf-hour-sat { background: #fff5fa !important; }
+.amf-hour-sun { background: #fffaf0 !important; }
+.amf-storm-table tbody .amf-hour-mon { background: #f3f8ff !important; }
+.amf-storm-table tbody .amf-hour-tue { background: #f2faf3 !important; }
+.amf-storm-table tbody .amf-hour-wed { background: #fff8f0 !important; }
+.amf-storm-table tbody .amf-hour-thu { background: #f8f4fd !important; }
+.amf-storm-table tbody .amf-hour-fri { background: #f1fbfa !important; }
+.amf-storm-table tbody .amf-hour-sat { background: #fff5fa !important; }
+.amf-storm-table tbody .amf-hour-sun { background: #fffaf0 !important; }
+
+/* === Altitude visible et profil neige expert === */
+.amf-city-altitude {
+    display: inline-flex;
+    margin: 7px 0 4px;
+    padding: 5px 9px;
+    align-items: center;
+    border: 1px solid #c8dbe3;
+    border-radius: 999px;
+    background: #f2f8fa;
+    color: #245b70;
+    font-size: .76rem;
+    font-weight: 850;
+    line-height: 1.2;
+}
+.amf-city-altitude.amf-altitude-missing {
+    border-color: #e2ca84;
+    background: #fff7dd;
+    color: #795b05;
+}
+
+.amf-snow-table {
+    min-width: 1260px;
+}
+
+.amf-snow-wind {
+    min-width: 142px;
+    white-space: nowrap;
+}
+.amf-snow-wind strong {
+    display: block;
+    margin-bottom: 5px;
+}
+.amf-thickness {
+    min-width: 88px;
+    font-weight: 900;
+    color: #315f78;
+}
+
+.amf-snow-details-cell {
+    min-width: 205px;
+}
+.amf-snow-profile {
+    display: flex;
+    width: 100%;
+    margin-top: 7px;
+    padding: 0;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+}
+.amf-snow-profile[hidden] {
+    display: none !important;
+}
+.amf-profile-section {
+    display: block;
+    margin: 0;
+    padding: 7px;
+    border: 1px solid #c8dfe8;
+    border-radius: 7px;
+    background: #f8fcfe;
+}
+.amf-profile-title {
+    display: block;
+    margin: 0 0 6px;
+    color: #175a76;
+    font-size: .7rem;
+    font-weight: 900;
+}
+.amf-profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.amf-profile-item {
+    display: flex;
+    padding: 4px 5px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-radius: 5px;
+    background: #fff;
+}
+.amf-profile-label {
+    color: #59717c;
+    font-size: .66rem;
+    font-weight: 800;
+}
+.amf-profile-value {
+    color: #123f53;
+    font-size: .74rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+/* La date et l'heure restent lisibles dans le tableau neige aussi. */
+.amf-snow-table thead th:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    min-width: 70px;
+}
+.amf-snow-table thead th:nth-child(2) {
+    position: sticky;
+    left: 70px;
+    z-index: 8;
+    min-width: 58px;
+    box-shadow: 4px 0 8px rgba(20, 78, 104, .08);
+}
+.amf-snow-table tbody .amf-day-cell {
+    position: sticky;
+    left: 0;
+    z-index: 6;
+    min-width: 70px;
+}
+.amf-snow-table tbody .amf-hour {
+    position: sticky;
+    left: 70px;
+    z-index: 5;
+    min-width: 58px;
+    box-shadow: 4px 0 8px rgba(20, 78, 104, .06);
+}
+
+
+/* === Diagrammes AROME modernisés === */
+.amf-charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 24px 20px 28px;
+    background:
+        radial-gradient(circle at top left, rgba(45, 137, 184, .07), transparent 38%),
+        #f5f9fb;
+}
+
+.amf-chart-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #d7e5ec;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdfe 100%);
+    box-shadow: 0 10px 28px rgba(20, 67, 94, .09);
+}
+
+.amf-chart-card::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2487b2, #60b8d5 45%, #9bcddd);
+    content: "";
+}
+
+.amf-chart-card h3 {
+    margin: 0;
+    padding: 18px 18px 7px;
+    color: #123e57;
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.3;
+}
+
+.amf-chart-total {
+    margin: 0 18px 4px;
+    color: #126d9c;
+    font-size: .78rem;
+    font-weight: 900;
+}
+
+.amf-chart {
+    min-height: 260px;
+    padding: 4px 12px 14px;
+}
+
+.amf-chart-metrics {
+    display: flex;
+    gap: 7px;
+    margin: 2px 4px 8px;
+    flex-wrap: wrap;
+}
+
+.amf-chart-metric {
+    display: inline-flex;
+    min-height: 28px;
+    padding: 5px 9px;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #dce8ee;
+    border-radius: 999px;
+    background: #f6fafc;
+    color: #466573;
+    font-size: .69rem;
+    font-weight: 800;
+}
+
+.amf-chart-metric-label {
+    color: #6d8792;
+    font-weight: 750;
+}
+
+.amf-chart-metric-value {
+    color: #173f55;
+    font-weight: 950;
+}
+
+.amf-chart-viewport {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #a9c7d5 transparent;
+}
+
+.amf-chart-svg {
+    display: block;
+    width: 100%;
+    min-width: 660px;
+    height: auto;
+    min-height: 235px;
+    overflow: visible;
+}
+
+.amf-chart-grid {
+    stroke: rgba(96, 128, 143, .22);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.amf-chart-grid-vertical {
+    stroke-dasharray: 3 6;
+    opacity: .55;
+}
+
+.amf-chart-axis {
+    fill: #617985;
+    font: 750 11px/1 Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.amf-chart-xaxis {
+    fill: #486575;
+    font-size: 10px;
+    font-weight: 850;
+}
+
+.amf-chart-legend-text {
+    fill: #3d5968;
+    font-weight: 850;
+}
+
+.amf-chart-line {
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    filter: drop-shadow(0 1px 1px rgba(21, 56, 73, .12));
+}
+
+.amf-chart-point {
+    stroke: #fff;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    cursor: help;
+}
+
+.amf-chart-value-label {
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 4px;
+    stroke-linejoin: round;
+    font: 900 11px/1 Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.amf-chart-area {
+    stroke: none !important;
+    opacity: .14;
+}
+
+.amf-series-temperature { stroke: #df6c2f; }
+.amf-chart-area.amf-series-temperature { fill: #f2a06e; opacity: .18; }
+.amf-chart-value-label.amf-series-temperature { fill: #b44b17; }
+
+.amf-series-pressure { stroke: #6758b3; }
+.amf-chart-area.amf-series-pressure { fill: #9185cf; opacity: .14; }
+.amf-chart-value-label.amf-series-pressure { fill: #514593; }
+
+.amf-series-wind { stroke: #197e91; }
+.amf-series-gust { stroke: #db7b25; }
+.amf-chart-wind-envelope {
+    fill: #e8b16f;
+    opacity: .16;
+    stroke: none;
+}
+
+.amf-series-rain-cumulative { stroke: #316b9d; }
+.amf-chart-rain-bar { fill: #5cb8de; }
+.amf-chart-rain-trace { fill: #9bd6ed; }
+.amf-chart-rain-light { fill: #62bfe4; }
+.amf-chart-rain-moderate { fill: #318fc8; }
+.amf-chart-rain-strong { fill: #2667b2; }
+.amf-chart-rain-intense { fill: #6551a8; }
+
+.amf-chart-day-band {
+    pointer-events: none;
+    opacity: .42;
+}
+.amf-dayband-mon { fill: #eaf4ff; }
+.amf-dayband-tue { fill: #edf8ef; }
+.amf-dayband-wed { fill: #fff4e8; }
+.amf-dayband-thu { fill: #f4edfc; }
+.amf-dayband-fri { fill: #eaf9f7; }
+.amf-dayband-sat { fill: #fceef5; }
+.amf-dayband-sun { fill: #fff8dc; }
+.amf-dayband-other { fill: #f5f7f8; }
+
+.amf-chart-day-label {
+    font: 900 10px/1 Inter, "Segoe UI", Arial, sans-serif;
+    letter-spacing: .02em;
+    text-transform: capitalize;
+}
+.amf-daylabel-mon { fill: #3978b2; }
+.amf-daylabel-tue { fill: #397b47; }
+.amf-daylabel-wed { fill: #9a5d18; }
+.amf-daylabel-thu { fill: #6f4c9b; }
+.amf-daylabel-fri { fill: #28756e; }
+.amf-daylabel-sat { fill: #9c4a72; }
+.amf-daylabel-sun { fill: #846614; }
+.amf-daylabel-other { fill: #647b87; }
+
+.amf-chart-empty {
+    min-height: 230px;
+    border: 1px dashed #d5e1e7;
+    border-radius: 12px;
+    background: #fafcfd;
+}
+
+@media (max-width: 1040px) {
+    .amf-charts {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .amf-charts {
+        gap: 14px;
+        padding: 14px 9px 18px;
+    }
+
+    .amf-chart-card {
+        border-radius: 14px;
+    }
+
+    .amf-chart-card h3 {
+        padding: 15px 13px 7px;
+        font-size: .9rem;
+    }
+
+    .amf-chart-total {
+        margin-right: 13px;
+        margin-left: 13px;
+    }
+
+    .amf-chart {
+        min-height: 245px;
+        padding: 3px 6px 10px;
+        overflow: visible;
+    }
+
+    .amf-chart-metrics {
+        margin-right: 6px;
+        margin-left: 6px;
+    }
+
+    .amf-chart-metric {
+        padding: 4px 8px;
+        font-size: .65rem;
+    }
+
+    .amf-chart-viewport {
+        border-radius: 10px;
+    }
+
+    .amf-chart-svg {
+        width: 760px;
+        min-width: 760px;
+        max-width: none;
+    }
+}
+
+/* === v2.8 : grands diagrammes + vraies infobulles + géolocalisation === */
+.amf-charts {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+    padding: 26px 20px 30px;
+}
+
+.amf-chart-card {
+    width: 100%;
+}
+
+.amf-chart-card h3 {
+    padding: 20px 20px 8px;
+    font-size: 1.08rem;
+}
+
+.amf-chart-total {
+    margin-right: 20px;
+    margin-left: 20px;
+    font-size: .86rem;
+}
+
+.amf-chart {
+    min-height: 420px;
+    padding: 6px 16px 18px;
+}
+
+.amf-chart-metrics {
+    gap: 9px;
+    margin: 4px 8px 12px;
+}
+
+.amf-chart-metric {
+    min-height: 32px;
+    padding: 6px 11px;
+    font-size: .76rem;
+}
+
+.amf-chart-viewport {
+    position: relative;
+    min-height: 390px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.amf-chart-svg {
+    display: block;
+    width: 100%;
+    min-width: 900px;
+    min-height: 390px;
+    max-width: none;
+}
+
+.amf-chart-axis {
+    font-size: 13px;
+}
+
+.amf-chart-xaxis {
+    font-size: 12px;
+}
+
+.amf-chart-day-label {
+    font-size: 12px;
+}
+
+.amf-chart-legend-text {
+    font-size: 12px;
+}
+
+.amf-chart-line {
+    stroke-width: 3.6;
+}
+
+.amf-chart-point {
+    transition: r .12s ease, filter .12s ease;
+    cursor: crosshair;
+}
+
+.amf-chart-point:hover,
+.amf-chart-point:focus {
+    r: 7.2px;
+    outline: none;
+    filter: drop-shadow(0 0 4px rgba(20, 62, 83, .32));
+}
+
+.amf-chart-rain-bar {
+    cursor: crosshair;
+}
+
+.amf-chart-rain-bar:hover,
+.amf-chart-rain-bar:focus {
+    outline: none;
+    filter: brightness(.92) drop-shadow(0 2px 3px rgba(20, 62, 83, .22));
+}
+
+.amf-chart-tooltip {
+    position: absolute;
+    z-index: 40;
+    max-width: 260px;
+    padding: 8px 11px;
+    border: 1px solid rgba(12, 70, 101, .16);
+    border-radius: 9px;
+    background: rgba(14, 49, 69, .96);
+    box-shadow: 0 8px 24px rgba(5, 37, 55, .22);
+    color: #fff;
+    font: 800 12px/1.35 Inter, "Segoe UI", Arial, sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateY(-100%);
+}
+
+.amf-card .amf-locate-button {
+    display: inline-flex;
+    min-height: 36px;
+    margin: 8px 0 0;
+    padding: 7px 12px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #8dbdd1;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(7, 59, 99, .06);
+    color: #0b628f;
+    font: 850 .78rem/1.15 Inter, "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+}
+
+.amf-card .amf-locate-button:hover,
+.amf-card .amf-locate-button:focus-visible {
+    outline: none;
+    border-color: #277fa8;
+    background: #eaf7fc;
+}
+
+.amf-card .amf-locate-button:disabled,
+.amf-card .amf-locate-button.is-loading {
+    opacity: .65;
+    cursor: wait;
+}
+
+/* Le bouton ajoute de la hauteur sous le champ : la liste de résultats descend. */
+.amf-search-results {
+    top: 116px;
+}
+
+@media (max-width: 680px) {
+    .amf-charts {
+        gap: 18px;
+        padding: 16px 8px 20px;
+    }
+
+    .amf-chart-card h3 {
+        padding: 16px 13px 7px;
+        font-size: .95rem;
+    }
+
+    .amf-chart {
+        min-height: 390px;
+        padding: 4px 6px 12px;
+    }
+
+    .amf-chart-viewport {
+        min-height: 360px;
+    }
+
+    .amf-chart-svg {
+        width: 1050px;
+        min-width: 1050px;
+        min-height: 360px;
+    }
+
+    .amf-chart-tooltip {
+        font-size: 11px;
+    }
+
+    .amf-card .amf-locate-button {
+        width: 100%;
+    }
+}
+
+
+/* v2.8.1 — graphiques en traits uniquement, sans zones remplies */
+.amf-chart-area,
+.amf-chart-wind-envelope {
+    display: none !important;
+    fill: none !important;
+    opacity: 0 !important;
+}
+
+.amf-chart-line {
+    stroke-width: 2.35 !important;
+    filter: none !important;
+}
+
+.amf-chart-point {
+    r: 4px;
+    fill: #fff !important;
+    stroke-width: 2.2 !important;
+}
+
+.amf-chart-point.amf-series-temperature { stroke: #df6c2f !important; }
+.amf-chart-point.amf-series-pressure { stroke: #6758b3 !important; }
+.amf-chart-point.amf-series-wind { stroke: #197e91 !important; }
+.amf-chart-point.amf-series-gust { stroke: #db7b25 !important; }
+.amf-chart-point.amf-series-rain-cumulative { stroke: #316b9d !important; }
+
+.amf-chart-day-band {
+    opacity: .20 !important;
+}
+
+
+/* v2.8.2 — correctif définitif des courbes SVG */
+.amf-chart-svg path.amf-chart-line,
+.amf-chart-svg .amf-chart-line {
+    fill: none !important;
+}
+
+/* Le cumul des précipitations est centré sous le titre du graphique. */
+.amf-chart-card .amf-chart-total {
+    width: auto;
+    margin: 4px auto 8px !important;
+    padding: 0 16px;
+    text-align: center !important;
+}
+
+.amf-plugin-version {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border: 1px solid #cfdde4;
+    border-radius: 999px;
+    background: #f7fafb;
+    color: #607985;
+    font-size: .68rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+/* v2.8.3 — journées nettement identifiables dans les diagrammes */
+.amf-chart-day-band {
+    opacity: .38 !important;
+}
+
+.amf-chart-day-strip {
+    pointer-events: none;
+    opacity: .94;
+}
+.amf-daystrip-mon { fill: #9cc9f3; }
+.amf-daystrip-tue { fill: #9bd3a5; }
+.amf-daystrip-wed { fill: #f5bd7c; }
+.amf-daystrip-thu { fill: #c3a7e5; }
+.amf-daystrip-fri { fill: #8ed4cb; }
+.amf-daystrip-sat { fill: #e9a9c8; }
+.amf-daystrip-sun { fill: #efd26e; }
+.amf-daystrip-other { fill: #c8d4da; }
+
+.amf-chart-day-separator {
+    pointer-events: none;
+    stroke-width: 2.2;
+    stroke-dasharray: 5 4;
+    opacity: .72;
+}
+.amf-dayseparator-mon { stroke: #4c8bc5; }
+.amf-dayseparator-tue { stroke: #4c925a; }
+.amf-dayseparator-wed { stroke: #c57a25; }
+.amf-dayseparator-thu { stroke: #7f5cac; }
+.amf-dayseparator-fri { stroke: #388d83; }
+.amf-dayseparator-sat { stroke: #b25f87; }
+.amf-dayseparator-sun { stroke: #ad8617; }
+.amf-dayseparator-other { stroke: #8399a3; }
+
+.amf-chart-day-label {
+    font-size: 12px !important;
+    font-weight: 950 !important;
+    letter-spacing: .035em !important;
+    paint-order: stroke;
+    stroke: rgba(255,255,255,.82);
+    stroke-width: 2px;
+    stroke-linejoin: round;
+}
+
+@media (max-width: 720px) {
+    .amf-chart-day-label {
+        font-size: 11px !important;
+    }
+}
+/* v2.8.5 — courbes simplifiées : sans points visibles, jours plus gros, meilleure échelle */
+.amf-chart-value-label {
+    display: none !important;
+}
+
+.amf-chart-point,
+.amf-chart-hitpoint {
+    vector-effect: non-scaling-stroke;
+}
+
+.amf-chart-point {
+    display: none !important;
+}
+
+.amf-chart-hitpoint {
+    fill: transparent !important;
+    stroke: none !important;
+    opacity: 0 !important;
+    pointer-events: all !important;
+}
+
+.amf-chart-line {
+    fill: none !important;
+    stroke-width: 2.8 !important;
+}
+
+.amf-chart-day-strip {
+    height: 46px;
+    opacity: 1 !important;
+}
+
+.amf-chart-day-label {
+    font-size: 24px !important;
+    font-weight: 1000 !important;
+    letter-spacing: .01em !important;
+    stroke-width: 3px !important;
+}
+
+.amf-chart-axis {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+}
+
+.amf-chart-xaxis {
+    font-size: 15px !important;
+}
+
+.amf-chart-grid {
+    opacity: .72;
+}
+
+@media (max-width: 900px) {
+    .amf-chart-day-label {
+        font-size: 19px !important;
+    }
+    .amf-chart-axis {
+        font-size: 14px !important;
+    }
+    .amf-chart-xaxis {
+        font-size: 13px !important;
+    }
+}
+
+
+/* v2.8.7 — échelle pluie pilotée par le cumul + plus d'air en haut des courbes */
+.amf-chart-day-label {
+    font-size: 26px !important;
+    font-weight: 1000 !important;
+}
+
+.amf-chart-day-strip {
+    opacity: 1 !important;
+}
+
+@media (max-width: 900px) {
+    .amf-chart-day-label {
+        font-size: 20px !important;
+    }
+}
+
+/* Module AROME unique : la carte partage la carte principale et ses onglets. */
+.amf-map-panel {
+    padding: 0 !important;
+}
+
+.amf-map-panel > .amfm-card {
+    margin: 0;
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.amf-map-panel .amfm-header,
+.amf-map-panel .amfm-card > .amf-footer {
+    display: none;
+}
+
+.amf-map-panel .amfm-toolbar {
+    border-radius: 0;
+}
+
+.amf-tab-map {
+    color: #173f78;
+}
