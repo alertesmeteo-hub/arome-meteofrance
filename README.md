@@ -53,7 +53,7 @@ Le ZIP du module se trouve dans la livraison séparée. Dans WordPress :
 4. dans Avada Builder, ajoutez un élément **Code Block** ou **Text Block** contenant :
 
 ```text
-[arome_meteo]
+[aromepi_meteo]
 ```
 
 Tout est intégré dans ce shortcode unique : recherche par commune ou code postal, géolocalisation, altitude, cartes, prévisions générales, tableaux orages/neige et quatre graphiques.
@@ -61,7 +61,7 @@ Tout est intégré dans ce shortcode unique : recherche par commune ou code post
 Exemple avec une ville initiale différente :
 
 ```text
-[arome_meteo ville="Paris" code="75056" departement="75" heures="48"]
+[aromepi_meteo ville="Paris" code="75056" departement="75" heures="48"]
 ```
 
 ## Structure publiée
