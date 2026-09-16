@@ -39,7 +39,7 @@ from arome_maps import DEFAULT_BOUNDS, AromeMapRenderer
 
 
 LOGGER = logging.getLogger("arome.france")
-PIPELINE_VERSION = "1.0.4"
+PIPELINE_VERSION = "1.0.5"
 DATASET_API = (
     "https://www.data.gouv.fr/api/1/datasets/"
     "paquets-arome-resolution-0-01deg/"
@@ -1367,6 +1367,17 @@ def build_product(
             "layers": len(map_manifest["layers"]),
             "steps": len(map_manifest["steps"]),
             "places": places_count,
+        },
+        "fixed_maps": {
+            "status": "ok" if map_renderer.fixed_steps else "unavailable",
+            "manifest": map_manifest["fixed_manifest"],
+            "region": "france",
+            "steps": len(map_renderer.fixed_steps),
+            "layers": len({
+                key
+                for fixed_step in map_renderer.fixed_steps
+                for key in fixed_step.get("files", {})
+            }),
         },
         "departments": department_index,
         "total_department_bytes": total_size,

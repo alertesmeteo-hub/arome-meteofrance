@@ -19,12 +19,12 @@ from pathlib import Path
 from typing import Any, Sequence
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from scipy.spatial import cKDTree
 
 
 MAP_SCHEMA_VERSION = 6
-MODULE_VERSION = "1.1.1"
+MODULE_VERSION = "1.2.7"
 # Une valeur numérique tous les deux pixels cartographiques : le survol reste
 # précis à l'échelle d'une commune sans multiplier déraisonnablement le poids
 # de la branche de données.
@@ -56,6 +56,26 @@ DEFAULT_BOUNDS = {
     "west": -12.0,
     "north": 57.0,
     "east": 18.0,
+}
+FIXED_MAP_BOUNDS = {
+    "south": 40.0,
+    "west": -6.5,
+    "north": 52.5,
+    "east": 11.0,
+}
+FIXED_MAP_WIDTH = 1280
+FIXED_MAP_INTERVAL_HOURS = 3
+FIXED_TEMPERATURE_VALUES_KEY = "temperature_valeurs"
+FIXED_MAP_KEYS = {
+    "temperature",
+    "pluie_1h",
+    "pluie_cumul",
+    "neige",
+    "rafales",
+    "pression",
+    "nebulosite",
+    "mucape",
+    "reflectivite",
 }
 
 
@@ -832,6 +852,19 @@ def _inverse_mercator(value: np.ndarray) -> np.ndarray:
     return np.degrees(2.0 * np.arctan(np.exp(value)) - np.pi / 2.0)
 
 
+def _map_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
+    names = (
+        "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf",
+        "Arial Bold.ttf" if bold else "Arial.ttf",
+    )
+    for name in names:
+        try:
+            return ImageFont.truetype(name, size=size)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
 class AromeMapRenderer:
     """Rend les champs AROME natifs et les frontières cartographiques."""
 
@@ -882,11 +915,217 @@ class AromeMapRenderer:
             list(france_departments) if france_departments is not None else None
         )
         self.steps: list[dict[str, Any]] = []
+        self.fixed_steps: list[dict[str, Any]] = []
         self.available_layers: set[str] = set()
         self._static_assets: dict[str, tuple[str, str]] = {}
+        self._fixed_line_cache: dict[str, list[list[tuple[int, int]]]] = {}
 
         self._prepare_interpolation()
         self._write_static_maps()
+
+    def _fixed_pixel(self, latitude: float, longitude: float) -> tuple[int, int]:
+        bounds = FIXED_MAP_BOUNDS
+        west = float(bounds["west"])
+        east = float(bounds["east"])
+        north_y = float(_mercator(float(bounds["north"])))
+        south_y = float(_mercator(float(bounds["south"])))
+        crop_west, crop_north = self._pixel(float(bounds["north"]), west)
+        crop_east, crop_south = self._pixel(float(bounds["south"]), east)
+        crop_width = max(1, crop_east - crop_west)
+        crop_height = max(1, crop_south - crop_north)
+        fixed_height = max(1, round(FIXED_MAP_WIDTH * crop_height / crop_width))
+        x = (longitude - west) / (east - west) * (FIXED_MAP_WIDTH - 1)
+        y = (north_y - float(_mercator(latitude))) / (north_y - south_y)
+        y *= fixed_height - 1
+        return int(round(x)), int(round(y))
+
+    def _draw_fixed_shapefile(
+        self,
+        draw: ImageDraw.ImageDraw,
+        path: Path,
+        *,
+        fill: str,
+        width: int,
+    ) -> None:
+        if not path.is_file():
+            return
+        cache_key = str(path.resolve())
+        cached = self._fixed_line_cache.get(cache_key)
+        if cached is not None:
+            for segment in cached:
+                draw.line(segment, fill=fill, width=width, joint="curve")
+            return
+        bounds = FIXED_MAP_BOUNDS
+        south = float(bounds["south"]) - 1.0
+        north = float(bounds["north"]) + 1.0
+        west = float(bounds["west"]) - 1.0
+        east = float(bounds["east"]) + 1.0
+        rendered_segments: list[list[tuple[int, int]]] = []
+        for points in _iter_shapefile_parts(path):
+            segment: list[tuple[int, int]] = []
+            for longitude, latitude in points:
+                if west <= longitude <= east and south <= latitude <= north:
+                    segment.append(self._fixed_pixel(latitude, longitude))
+                elif segment:
+                    if len(segment) >= 2:
+                        rendered_segments.append(segment)
+                    segment = []
+            if len(segment) >= 2:
+                rendered_segments.append(segment)
+        self._fixed_line_cache[cache_key] = rendered_segments
+        for segment in rendered_segments:
+            draw.line(segment, fill=fill, width=width, joint="curve")
+
+    def _write_fixed_map(
+        self,
+        image: Image.Image,
+        spec: LayerSpec,
+        lead_hour: int,
+        valid_time: datetime,
+        *,
+        field: np.ndarray | None = None,
+        output_key: str | None = None,
+        show_values: bool = False,
+        label_override: str | None = None,
+    ) -> str:
+        bounds = FIXED_MAP_BOUNDS
+        left, top = self._pixel(float(bounds["north"]), float(bounds["west"]))
+        right, bottom = self._pixel(float(bounds["south"]), float(bounds["east"]))
+        left = max(0, min(self.width - 1, left))
+        right = max(left + 1, min(self.width, right))
+        top = max(0, min(self.height - 1, top))
+        bottom = max(top + 1, min(self.height, bottom))
+        crop = image.crop((left, top, right, bottom))
+        field_crop = None
+        if field is not None:
+            field_crop = np.asarray(field[top:bottom, left:right], dtype=np.float32)
+        map_height = max(1, round(FIXED_MAP_WIDTH * crop.height / crop.width))
+        crop = crop.resize((FIXED_MAP_WIDTH, map_height), Image.Resampling.BILINEAR)
+
+        header_height = 62
+        footer_height = 70
+        canvas = Image.new(
+            "RGBA",
+            (FIXED_MAP_WIDTH, header_height + map_height + footer_height),
+            "#ffffff",
+        )
+        map_background = Image.new("RGBA", crop.size, "#e8f0f7")
+        map_background.alpha_composite(crop)
+        map_draw = ImageDraw.Draw(map_background)
+        if self.boundary_directory is not None:
+            self._draw_fixed_shapefile(
+                map_draw,
+                self.boundary_directory / "ne_50m_admin_0_boundary_lines_land.shp",
+                fill="#555c63",
+                width=2,
+            )
+            self._draw_fixed_shapefile(
+                map_draw,
+                self.boundary_directory / "ne_50m_coastline.shp",
+                fill="#2d3338",
+                width=2,
+            )
+        canvas.alpha_composite(map_background, (0, header_height))
+        draw = ImageDraw.Draw(canvas)
+        title_font = _map_font(21, bold=True)
+        meta_font = _map_font(16)
+        small_font = _map_font(14)
+        draw.rectangle((0, 0, FIXED_MAP_WIDTH, header_height), fill="#ffffff")
+        draw.text((16, 9), "AROME 1,3 km • Météo-France", fill="#18384b", font=title_font)
+        layer_label = label_override or spec.label
+        draw.text((16, 37), layer_label, fill="#35586b", font=meta_font)
+        valid_label = valid_time.strftime("%d/%m/%Y %Hh UTC")
+        lead_label = f"Échéance +{lead_hour:02d} h • {valid_label}"
+        lead_width = draw.textbbox((0, 0), lead_label, font=title_font)[2]
+        draw.text(
+            (FIXED_MAP_WIDTH - lead_width - 16, 18),
+            lead_label,
+            fill="#c91f24",
+            font=title_font,
+        )
+
+        brand = "www.alertes-meteo.com"
+        brand_box = draw.textbbox((0, 0), brand, font=small_font)
+        brand_width = brand_box[2] - brand_box[0]
+        brand_y = header_height + map_height - 34
+        draw.rounded_rectangle(
+            (FIXED_MAP_WIDTH - brand_width - 28, brand_y,
+             FIXED_MAP_WIDTH - 10, brand_y + 26),
+            radius=4,
+            fill="#1d2730cc",
+        )
+        draw.text(
+            (FIXED_MAP_WIDTH - brand_width - 19, brand_y + 5),
+            brand,
+            fill="#ffffff",
+            font=small_font,
+        )
+
+        if show_values and field_crop is not None and field_crop.size:
+            value_font = _map_font(11, bold=True)
+            target_spacing = 44
+            row_step = max(1, round(field_crop.shape[0] * target_spacing / map_height))
+            column_step = max(
+                1,
+                round(field_crop.shape[1] * target_spacing / FIXED_MAP_WIDTH),
+            )
+            for row in range(row_step // 2, field_crop.shape[0], row_step):
+                y = header_height + round(
+                    row / max(1, field_crop.shape[0] - 1) * (map_height - 1)
+                )
+                for column in range(
+                    column_step // 2,
+                    field_crop.shape[1],
+                    column_step,
+                ):
+                    value = float(field_crop[row, column])
+                    if not np.isfinite(value):
+                        continue
+                    x = round(
+                        column / max(1, field_crop.shape[1] - 1)
+                        * (FIXED_MAP_WIDTH - 1)
+                    )
+                    text = f"{value:.0f}"
+                    box = draw.textbbox((0, 0), text, font=value_font, stroke_width=1)
+                    text_width = box[2] - box[0]
+                    text_height = box[3] - box[1]
+                    draw.text(
+                        (x - text_width / 2, y - text_height / 2),
+                        text,
+                        fill="#111820",
+                        font=value_font,
+                        stroke_width=1,
+                        stroke_fill="#ffffff",
+                    )
+
+        legend_top = header_height + map_height + 12
+        legend_left = 18
+        legend_right = FIXED_MAP_WIDTH - 18
+        stops = list(spec.stops)
+        sample_indexes = np.linspace(0, len(stops) - 1, min(14, len(stops))).round().astype(int)
+        sampled = [stops[index] for index in sample_indexes]
+        swatch_width = (legend_right - legend_left) / len(sampled)
+        for index, (value, colour) in enumerate(sampled):
+            x0 = round(legend_left + index * swatch_width)
+            x1 = round(legend_left + (index + 1) * swatch_width)
+            draw.rectangle((x0, legend_top, x1, legend_top + 18), fill=colour)
+            if index in {0, len(sampled) - 1} or index % 2 == 0:
+                draw.text((x0, legend_top + 22), f"{value:g}", fill="#283b46", font=small_font)
+        unit_label = spec.unit or ""
+        unit_width = draw.textbbox((0, 0), unit_label, font=meta_font)[2]
+        draw.text(
+            (FIXED_MAP_WIDTH - unit_width - 18, legend_top + 22),
+            unit_label,
+            fill="#283b46",
+            font=meta_font,
+        )
+
+        destination_key = output_key or spec.key
+        destination_directory = self.output_directory / "fixed" / destination_key
+        destination_directory.mkdir(parents=True, exist_ok=True)
+        destination = destination_directory / f"{lead_hour:03d}.png"
+        canvas.convert("RGB").save(destination, "PNG", optimize=True, compress_level=7)
+        return f"maps/fixed/{destination_key}/{destination.name}"
 
     def _prepare_interpolation(self) -> None:
         south = float(self.bounds["south"])
@@ -1200,6 +1439,7 @@ class AromeMapRenderer:
     ) -> None:
         files: dict[str, str] = {}
         probes: dict[str, str] = {}
+        fixed_files: dict[str, str] = {}
         for spec in LAYER_SPECS:
             if spec.source_key is not None:
                 continue
@@ -1218,6 +1458,27 @@ class AromeMapRenderer:
             image = self._image_from_field(field, spec)
             image.save(destination, "WEBP", quality=86, method=5)
             files[spec.key] = f"maps/{spec.key}/{destination.name}"
+            if (
+                spec.key in FIXED_MAP_KEYS
+                and lead_hour % FIXED_MAP_INTERVAL_HOURS == 0
+            ):
+                fixed_files[spec.key] = self._write_fixed_map(
+                    image,
+                    spec,
+                    lead_hour,
+                    valid_time,
+                )
+                if spec.key == "temperature":
+                    fixed_files[FIXED_TEMPERATURE_VALUES_KEY] = self._write_fixed_map(
+                        image,
+                        spec,
+                        lead_hour,
+                        valid_time,
+                        field=field,
+                        output_key=FIXED_TEMPERATURE_VALUES_KEY,
+                        show_values=True,
+                        label_override="Température à 2 m avec valeurs",
+                    )
             probe_destination = (
                 self.output_directory
                 / "values"
@@ -1249,6 +1510,14 @@ class AromeMapRenderer:
                 "probes": probes,
             }
         )
+        if fixed_files:
+            self.fixed_steps.append(
+                {
+                    "lead_hour": int(lead_hour),
+                    "valid_time": valid_time.isoformat().replace("+00:00", "Z"),
+                    "files": fixed_files,
+                }
+            )
 
     def write_manifest(
         self,
@@ -1293,8 +1562,62 @@ class AromeMapRenderer:
         }
         if places_path:
             manifest["places"] = places_path
+        manifest["fixed_manifest"] = "maps/fixed/index.json"
         destination = self.output_directory / "index.json"
         with destination.open("w", encoding="utf-8") as handle:
             json.dump(manifest, handle, ensure_ascii=False, separators=(",", ":"))
+            handle.write("\n")
+        fixed_layer_keys = {
+            key
+            for step in self.fixed_steps
+            for key in step.get("files", {})
+        }
+        fixed_layers = {
+            spec.key: {
+                "label": spec.label,
+                "unit": spec.unit,
+                "group": spec.group,
+                "stops": [
+                    {"value": value, "color": colour}
+                    for value, colour in spec.stops
+                ],
+            }
+            for spec in LAYER_SPECS
+            if spec.key in fixed_layer_keys
+        }
+        if FIXED_TEMPERATURE_VALUES_KEY in fixed_layer_keys:
+            temperature_spec = next(
+                spec for spec in LAYER_SPECS if spec.key == "temperature"
+            )
+            fixed_layers[FIXED_TEMPERATURE_VALUES_KEY] = {
+                "label": "Température à 2 m avec valeurs",
+                "unit": temperature_spec.unit,
+                "group": "Températures",
+                "stops": [
+                    {"value": value, "color": colour}
+                    for value, colour in temperature_spec.stops
+                ],
+            }
+        fixed_manifest = {
+            "schema_version": 1,
+            "status": "ok" if self.fixed_steps else "unavailable",
+            "module_version": MODULE_VERSION,
+            "generated_at": generated_at,
+            "run_time": run_time,
+            "region": "france",
+            "coverage": "France métropolitaine et Corse",
+            "bounds": FIXED_MAP_BOUNDS,
+            "layers": fixed_layers,
+            "steps": self.fixed_steps,
+        }
+        fixed_directory = self.output_directory / "fixed"
+        fixed_directory.mkdir(parents=True, exist_ok=True)
+        with (fixed_directory / "index.json").open("w", encoding="utf-8") as handle:
+            json.dump(
+                fixed_manifest,
+                handle,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            )
             handle.write("\n")
         return manifest
