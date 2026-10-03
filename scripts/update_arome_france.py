@@ -501,12 +501,55 @@ def choose_resources(
     return selection, parse_run_text(None if run_text == "local" else run_text)
 
 
+MIN_PARTIAL_HOURS = 12
+
+
+def choose_partial_run(
+    resources: Iterable[Resource], forecast_hours: int
+) -> tuple[dict[tuple[str, int], Resource], datetime | None, int] | None:
+    """Run le plus récent dont les échéances sont contiguës de +00 h à +N h.
+
+    Mieux vaut publier un run récent tronqué (N >= MIN_PARTIAL_HOURS) que de rester
+    sur un run ancien. Le run sera reconstruit dès qu'il sera complet.
+    """
+
+    grouped: dict[str, dict[tuple[str, int], Resource]] = defaultdict(dict)
+    for resource in resources:
+        grouped[resource.run_text or "local"][resource.group, resource.lead] = resource
+    best: tuple[datetime, str, int] | None = None
+    for run_text, selection in grouped.items():
+        if ("SP3", 0) not in selection:
+            continue
+        hours = -1
+        while (
+            hours + 1 <= forecast_hours
+            and ("SP1", hours + 1) in selection
+            and ("SP2", hours + 1) in selection
+        ):
+            hours += 1
+        if hours < MIN_PARTIAL_HOURS:
+            continue
+        parsed = parse_run_text(None if run_text == "local" else run_text)
+        stamp = parsed or datetime.min.replace(tzinfo=timezone.utc)
+        if best is None or stamp > best[0]:
+            best = (stamp, run_text, hours)
+    if best is None:
+        return None
+    stamp, run_text, hours = best
+    selection = {
+        key: value
+        for key, value in grouped[run_text].items()
+        if key[1] <= hours
+    }
+    return selection, parse_run_text(None if run_text == "local" else run_text), hours
+
+
 def wait_for_complete_remote_run(
     session: requests.Session,
     forecast_hours: int,
     attempts: int,
     retry_seconds: int,
-) -> tuple[dict[tuple[str, int], Resource], datetime | None] | None:
+) -> tuple[dict[tuple[str, int], Resource], datetime | None, int] | None:
     """Attend la fin du remplacement SP1/SP2/SP3 effectué par data.gouv.fr.
 
     Météo-France remplace parfois les quatre familles l'une après l'autre. Dans
@@ -518,7 +561,8 @@ def wait_for_complete_remote_run(
     for attempt in range(1, attempts + 1):
         discovered = api_resources(session)
         try:
-            return choose_resources(discovered, forecast_hours)
+            chosen, hint = choose_resources(discovered, forecast_hours)
+            return chosen, hint, forecast_hours
         except IncompleteRunError as exc:
             last_error = exc
             if attempt < attempts:
@@ -532,6 +576,15 @@ def wait_for_complete_remote_run(
                 if retry_seconds:
                     time.sleep(retry_seconds)
 
+    partial = choose_partial_run(api_resources(session), forecast_hours)
+    if partial is not None:
+        LOGGER.warning(
+            "%s. Publication du run le plus récent, tronqué à +%s h ; il sera "
+            "reconstruit dès qu'il sera complet.",
+            last_error,
+            partial[2],
+        )
+        return partial
     LOGGER.warning(
         "%s. Aucune donnée ne sera écrasée ; le prochain passage du workflow "
         "réessaiera automatiquement. Aucune clé API Météo-France n'est requise.",
@@ -540,7 +593,7 @@ def wait_for_complete_remote_run(
     return None
 
 
-def already_published(url: str, run_time: datetime | None) -> bool:
+def already_published(url: str, run_time: datetime | None, hours: int) -> bool:
     if not url or run_time is None:
         return False
     try:
@@ -557,6 +610,7 @@ def already_published(url: str, run_time: datetime | None) -> bool:
             payload.get("status") == "ok"
             and model.get("run_time") == iso_utc(run_time)
             and model.get("pipeline_version") == PIPELINE_VERSION
+            and model.get("forecast_hours_requested") == hours
         )
     except (requests.RequestException, ValueError, TypeError):
         return False
@@ -1432,6 +1486,7 @@ def main() -> int:
     if args.resource_directory:
         discovered = local_resources(Path(args.resource_directory))
         resources, run_hint = choose_resources(discovered, args.forecast_hours)
+        hours = args.forecast_hours
     else:
         selection = wait_for_complete_remote_run(
             session,
@@ -1441,10 +1496,10 @@ def main() -> int:
         )
         if selection is None:
             return 0
-        resources, run_hint = selection
+        resources, run_hint, hours = selection
     LOGGER.info("Run AROME sélectionné : %s", iso_utc(run_hint) or "GRIB local")
     if not args.force and not args.resource_directory and already_published(
-        args.current_metadata_url, run_hint
+        args.current_metadata_url, run_hint, hours
     ):
         LOGGER.info("Ce run AROME est déjà publié ; aucune reconstruction nécessaire")
         return 0
@@ -1453,7 +1508,7 @@ def main() -> int:
         result = build_product(
             resources,
             catalog,
-            args.forecast_hours,
+            hours,
             session,
             Path(temporary),
             run_hint,
