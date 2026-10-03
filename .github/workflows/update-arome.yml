@@ -60,7 +60,8 @@ jobs:
           assert index["coverage"]["communes"] == 34746
           assert index["coverage"]["departments"] == 96
           assert len(maps["layers"]) >= 20
-          assert len(maps["steps"]) >= 48
+          # Run tronqué accepté (publication progressive Météo-France) : on exige les échéances annoncées.
+          assert len(maps["steps"]) >= index["model"]["forecast_hours_requested"]
           assert (root / "departements/66.json").is_file()
           print(
               f"Validation OK : {len(maps['layers'])} cartes, "
