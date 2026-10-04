@@ -39,7 +39,7 @@ from arome_maps import DEFAULT_BOUNDS, AromeMapRenderer
 
 
 LOGGER = logging.getLogger("arome.france")
-PIPELINE_VERSION = "1.0.5"
+PIPELINE_VERSION = "1.0.6"
 DATASET_API = (
     "https://www.data.gouv.fr/api/1/datasets/"
     "paquets-arome-resolution-0-01deg/"
@@ -138,6 +138,8 @@ MAP_FIELDS = {
     "graupel_mm",
     "snow_graupel_total_mm",
     "wind_speed_kmh",
+    "wind_u_kmh",
+    "wind_v_kmh",
     "wind_gust_kmh",
     "pressure_hpa",
     "surface_pressure_hpa",
@@ -1062,6 +1064,8 @@ def transform_step(
         "cloud_high_pct": rounded(cloud_high, 0),
         "wind_speed_kmh": rounded(wind_speed, 0),
         "wind_direction_deg": rounded(wind_direction, 0),
+        "wind_u_kmh": rounded(u_wind * 3.6, 1),
+        "wind_v_kmh": rounded(v_wind * 3.6, 1),
         "wind_gust_kmh": rounded(gust_speed, 0),
         "pressure_hpa": rounded(pressure, 0),
         "pressure_surface_hpa": rounded(surface_pressure, 0),

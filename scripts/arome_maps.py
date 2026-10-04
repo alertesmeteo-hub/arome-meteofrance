@@ -1502,6 +1502,25 @@ class AromeMapRenderer:
             probes[spec.key] = probes[spec.source_key]
             self.available_layers.add(spec.key)
 
+        # Composantes du vent (grilles de valeurs seules, sans image) : elles servent aux traits
+        # de vent animés côté site. Une erreur ici ne doit jamais empêcher la publication des cartes.
+        for vector_key, vector_field in (("vent_u", "wind_u_kmh"), ("vent_v", "wind_v_kmh")):
+            values = fields.get(vector_field)
+            if values is None or not np.any(np.isfinite(values)):
+                continue
+            try:
+                vector_spec = LayerSpec(
+                    vector_key, vector_key, "km/h", vector_field,
+                    ((-120.0, "#000000"), (120.0, "#ffffff")),
+                )
+                vector_destination = (
+                    self.output_directory / "values" / vector_key / f"{lead_hour:03d}.hkv.gz"
+                )
+                self._write_probe_field(self._interpolate(values), vector_spec, vector_destination)
+                probes[vector_key] = f"maps/values/{vector_key}/{vector_destination.name}"
+            except Exception:  # noqa: BLE001
+                continue
+
         self.steps.append(
             {
                 "lead_hour": int(lead_hour),
